@@ -1,42 +1,136 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 1vh 20px;
+  min-height: 98vh;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.left_layout {
+  flex: 1;
+  border-right: 1px solid lightgray;
+}
+
+.right_layout {
+  flex: 6;
+}
+
+.father_icon {
+  position: relative;
+}
+
+.son_icon {
+  background-color: white;
+  z-index: 99;
+  position: absolute;
+  font-size: 20px;
+  border-radius: 50%;
+  border: 1px solid lightgray;
+  padding: 0px 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  color: gray;
+}
+
+.son_icon_display {
+  top: 48vh;
+  right: -15px;
+}
+
+.son_icon_hidden {
+  top: 48vh;
+  left: 10px;
+}
+
+.new_chat {
+  border: 1px solid lightgray;
+  padding: 10px 20px;
+  margin: 20px 10px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.new_chat_text {
+  border: 1px solid green;
+  display: flex;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.left_person {
+  width: 100%;
+  padding: 1vh 20px;
+  position: absolute;
+  top: 90vh;
+  border-top: 1px solid lightgray;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.false_img {
+  flex: 1;
 }
 
-.card {
-  padding: 2em;
+.false_img_right {
+  flex: 3;
 }
 
-.read-the-docs {
-  color: #888;
+.flase_img_son {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(-135deg, #0000cc, #009dff);
+  border: 1px solid lightblue;
+  border-radius: 50%;
+}
+
+.right_layout_son {
+  margin: 0 auto;
+  width: 100vh;
+  height: 98vh;
+  position: relative;
+}
+
+.right_layout_son_ipt {
+  position: absolute;
+  bottom: 0;
+}
+
+.btn {
+  border: none;
+  padding: 10px 15px;
+  background-color: #18a058;
+  border-radius: 1px;
+  color: white;
+}
+
+.ipt {
+  width: 85vh;
+  margin: 10px 20px;
+  padding: 10px 20px;
+  border: 1px solid lightgray;
+}
+
+.right_layout_myselfChat {
+  width: 200px;
+  position: absolute;
+  top: 5px;
+  right: 0;
+  display: flex;
+}
+
+.myself_chat {
+  position: absolute;
+  top: 30px;
+  right: 80px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #7ae1b6;
+  opacity: 0.8;
 }
