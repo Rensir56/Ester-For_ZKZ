@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import {LeftLayout} from "./leftLayout/leftLayout.tsx";
 import {Layout, Menu, theme, Input} from "antd"
@@ -34,7 +34,7 @@ const App: React.FC = () => {
   const [currentFigure,setCurrentFigure] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<string>("text")
   const [loading, setLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<message[]>([]);
+  const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",type:"text",data:"yes",time:1111111111111}]);
 
   const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
   const onSearch = (value: string) => {
@@ -56,6 +56,7 @@ const App: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const messageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCurrentTime(Date.now());
@@ -88,8 +89,21 @@ const App: React.FC = () => {
               minHeight: 280,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
-            }}
-        >
+            }}>
+       <div className="chat-body" ref = {messageRef}>
+        {/* {roomMessageData?.messages && roomMessageData.messages */}
+        {messages
+            .map(item => (
+                <MessageBox
+                    username = {item.username}
+                    avatarPath = {item.avatarPath}
+                    sender = {item.sender}
+                    type = {item.type}
+                    data = {item.data}
+                    time = {item.time}
+                />
+            ))}
+        </div>
       main
         <div className="inputBox" style={{display: "flex", justifyContent: "center"}}>
           <Search placeholder={"说点什么吧"} enterButton={"发送"} loading={loading} style={{position:"fixed" ,bottom: "10%", zIndex : 1, width:"50%"}} onSearch={onSearch}>
