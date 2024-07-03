@@ -1,0 +1,29 @@
+.left_layout {
+    flex: 1;
+    border-right: 1px solid lightgray;
+}
+.son_icon {
+    background-color: white;
+    z-index: 99;
+    position: absolute;
+    font-size: 20px;
+    border-radius: 50%;
+    border: 1px solid lightgray;
+    padding: 0px 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    color: gray;
+}
+
+.son_icon_display {
+    top: 48vh;
+    right: -15px;
+}
+
+.son_icon_hidden {
+    top: 48vh;
+    left: 10px;
+}
+.father_icon {
+    position: relative;
+}
+

@@ -1,14 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-
+import {LeftLayout} from "./leftLayout/leftLayout.tsx";
+import {Layout,Menu,theme,Input} from "antd"
+import type {MenuProps} from "antd"
+import {AppstoreOutlined,MailOutlined,SettingOutlined} from "@ant-design/icons"
+import {figures} from "./CONST.ts";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
+const {Header,Content,Footer,Sider} = Layout
+const {Search} = Input
+type MenuItem = Required<MenuProps>['items'][number];
+const items: MenuItem[] = [
+  {
+    label: '文本对话',
+    key: 'text',
+    icon: <MailOutlined />,
+  },
+  {
+    label: '语音对话',
+    key: 'audio',
+    icon: <MailOutlined />,
+  },
+  {
+    label: "视频对话",
+    key : "video",
+    icon: <MailOutlined />,
+  }
+];
 const App: React.FC = () => {
-  const [isLeftLayoutVisible, setIsLeftLayoutVisible] = useState(true);
   const [currentTime, setCurrentTime] = useState<string>('');
-
-  const toggleLeftLayout = () => {
-    setIsLeftLayoutVisible(!isLeftLayoutVisible);
-  };
-
+  const [currentFigure,setCurrentFigure] = useState<string>('');
+  const [currentMode, setCurrentMode] = useState<string>("text")
+  const [loading, setLoading] = useState<boolean>(false);
+  const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
+  const onSearch = (value: string) => {
+    console.log(value)
+  }
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
   const isZero = (num: number) => (num < 10 ? '0' : '') + num;
 
   const getDateTime = () => {
@@ -29,56 +59,40 @@ const App: React.FC = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
+  const [collapsed ,setCollapsed] = useState(false);
   return (
-    <div className="container">
-      {!isLeftLayoutVisible && (
-        <div className="son_icon son_icon_hidden" onClick={toggleLeftLayout}>
-          &gt;
+  <Layout style={{minHeight: '100vh'}}>
+    <Header style={{
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      width: window.innerWidth,
+      display: 'flex',
+      alignItems: 'center',
+    }}>
+      <Menu theme="dark" items={items} onClick={chooseMode} selectedKeys={[currentMode]} mode={"horizontal"} style={{flex: 1 , minWidth : 0, justifyContent:"space-evenly"}}></Menu>
+    </Header>
+    <Layout>
+      <Sider collapsible collapsed={collapsed} collapsedWidth={0} onCollapse={(value) => setCollapsed(value)} width={200} >
+        <LeftLayout figures={figures}></LeftLayout>
+      </Sider>
+      <Content
+            style={{
+              padding: 50,
+              margin: 20,
+              minHeight: 280,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+        >
+      main
+        <div className="inputBox" style={{display: "flex", justifyContent: "center"}}>
+          <Search placeholder={"说点什么吧"} enterButton={"发送"} loading={loading} style={{position:"fixed" ,bottom: "10%", zIndex : 1, width:"50%"}} onSearch={onSearch}>
+          </Search>
         </div>
-      )}
-      {isLeftLayoutVisible && (
-        <div className="left_layout">
-          <div className="father_icon">
-            <div className="son_icon son_icon_display" onClick={toggleLeftLayout}>
-              &lt;
-            </div>
-            <div className="left_person">
-              <div className="person_info">
-                <div className="false_img">
-                  <div className="flase_img_son"></div>
-                </div>
-                <div className="false_img_right">
-                  <strong>Michael Jackson</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="new_chat">新建聊天</div>
-          <div className="new_chat new_chat_text">
-            <div className="false_img text_icon">...</div>
-            <div className="text_message">前端有哪些性能优化？</div>
-          </div>
-        </div>
-      )}
-      <div className="right_layout">
-        <div className="right_layout_son">
-          <div className="right_layout_myselfChat">
-            <div className="datetime" style={{ flex: 2, fontSize: 13, color: 'lightgray' }}>{currentTime}</div>
-            <div className="profile_image" style={{ flex: 1 }}>
-              <div className="flase_img_son" style={{ width: 40, height: 40 }}></div>
-            </div>
-          </div>
-          <div className="myself_chat">
-            前端有哪些性能优化？
-          </div>
-          <div className="right_layout_son_ipt">
-            <input className="ipt" type="text" placeholder="来说点什么吧..." />
-            <button className="btn">发送</button>
-          </div>
-        </div>
-      </div>
-    </div>
+      </Content>
+    </Layout>
+  </Layout>
   );
 };
 
