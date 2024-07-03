@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import {LeftLayout} from "./leftLayout/leftLayout.tsx";
-import {Layout,Menu,theme,Input} from "antd"
+import {Layout, Menu, theme, Input} from "antd"
 import type {MenuProps} from "antd"
-import {AppstoreOutlined,MailOutlined,SettingOutlined} from "@ant-design/icons"
+import {AppstoreOutlined,MailOutlined} from "@ant-design/icons"
 import {figures} from "./CONST.ts";
-import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
-const {Header,Content,Footer,Sider} = Layout
+import {message} from "./interfaces.ts"
+import {MessageBox} from "./MessageBox/MessageBox.tsx";
+import {Message} from "@arco-design/web-react";
+const {Header,Content,Sider} = Layout
 const {Search} = Input
 type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
@@ -24,38 +25,35 @@ const items: MenuItem[] = [
   {
     label: "视频对话",
     key : "video",
-    icon: <MailOutlined />,
+    icon: <AppstoreOutlined />,
   }
 ];
+
 const App: React.FC = () => {
-  const [currentTime, setCurrentTime] = useState<string>('');
+  const [currentTime, setCurrentTime] = useState<number>(0);
   const [currentFigure,setCurrentFigure] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<string>("text")
   const [loading, setLoading] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
   const onSearch = (value: string) => {
-    console.log(value)
+    setLoading(!loading)
+    // send requests here according to currentMode(API) and currentFigure(request content)
+    //TODO
+
+  }
+  const chooseFigure = (val : string) => {
+    setCurrentFigure(val)
   }
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const isZero = (num: number) => (num < 10 ? '0' : '') + num;
 
-  const getDateTime = () => {
-    const datetime = new Date();
-    const year = datetime.getFullYear();
-    const month = isZero(datetime.getMonth() + 1);
-    const day = isZero(datetime.getDate());
-    const hour = isZero(datetime.getHours());
-    const minute = isZero(datetime.getMinutes());
-    const seconds = isZero(datetime.getSeconds());
-    return `${year}/${month}/${day} ${hour}:${minute}:${seconds}`;
-  };
 
   useEffect(() => {
-    setCurrentTime(getDateTime());
+    setCurrentTime(Date.now());
     const interval = setInterval(() => {
-      setCurrentTime(getDateTime());
+      setCurrentTime(Date.now());
     }, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -74,7 +72,7 @@ const App: React.FC = () => {
     </Header>
     <Layout>
       <Sider collapsible collapsed={collapsed} collapsedWidth={0} onCollapse={(value) => setCollapsed(value)} width={200} >
-        <LeftLayout figures={figures}></LeftLayout>
+          <LeftLayout figures={figures} curFig={currentFigure} chooseFig={chooseFigure}></LeftLayout>
       </Sider>
       <Content
             style={{
