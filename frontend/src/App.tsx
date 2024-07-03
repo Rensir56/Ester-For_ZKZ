@@ -34,7 +34,7 @@ const App: React.FC = () => {
   const [currentFigure,setCurrentFigure] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<string>("text")
   const [loading, setLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",type:"text",data:"yes",time:1111111111111}]);
+  const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",flag:1,type:"text",data:"yes",time:1111111111111}]);
 
   const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
   const onSearch = (value: string) => {
@@ -44,6 +44,7 @@ const App: React.FC = () => {
     setMessages([...messages,{
       type : 'text',
       data : value,
+      flag : 0,
       avatarPath : defaultUsr.avatarPath,
       username : defaultUsr.username,
       time  : Date.now()
@@ -97,14 +98,13 @@ const App: React.FC = () => {
                 <MessageBox
                     username = {item.username}
                     avatarPath = {item.avatarPath}
-                    sender = {item.sender}
+                    flag = {item.flag}
                     type = {item.type}
                     data = {item.data}
                     time = {item.time}
                 />
             ))}
         </div>
-      main
         <div className="inputBox" style={{display: "flex", justifyContent: "center"}}>
           <Search placeholder={"说点什么吧"} enterButton={"发送"} loading={loading} style={{position:"fixed" ,bottom: "10%", zIndex : 1, width:"50%"}} onSearch={onSearch}>
           </Search>

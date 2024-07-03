@@ -1,30 +1,24 @@
 import {message} from "../interfaces.ts";
 import {TextMessageBox} from "./TextMessageBox.tsx";
-import {Avatar} from "antd";
 
-export function MessageBox ({mes} : {mes : message}){
-    const isZero = (num: number) => (num < 10 ? '0' : '') + num;
 
-    const getDateTime = (timestamp:number): string => {
-        const datetime = new Date(timestamp);
-        const year = datetime.getFullYear();
-        const month = isZero(datetime.getMonth() + 1);
-        const day = isZero(datetime.getDate());
-        const hour = isZero(datetime.getHours());
-        const minute = isZero(datetime.getMinutes());
-        const seconds = isZero(datetime.getSeconds());
-        return `${year}/${month}/${day} ${hour}:${minute}:${seconds}`;
-    };
-
+export function MessageBox (mes :message){
     return (
         <>
             <div className="messageContainer">
-               <Avatar src={mes.avatarPath} ></Avatar>
+               
                <div className="dataContainer">
                    {
                        mes.type == "text" ?
                        (<div className="textMessage">
-                            <TextMessageBox words={mes.data}></TextMessageBox>
+                            <TextMessageBox
+                                username={mes.username}
+                                avatarPath={mes.avatarPath}
+                                flag={mes.flag}
+                                type={mes.type}
+                                data={mes.data}
+                                time={mes.time}
+                            />
                        </div>) : mes.type == "audio" ?
                        (<div className="audioMessage">
                            //TODO
@@ -35,9 +29,6 @@ export function MessageBox ({mes} : {mes : message}){
 
                    }
                </div>
-                <div className="messageTimeContainer">
-                    {getDateTime(mes.time)}
-                </div>
             </div>
         </>
     )
