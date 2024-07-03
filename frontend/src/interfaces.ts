@@ -3,9 +3,9 @@ export interface figureInfo {
     figureName :string;
 }
 export interface message {
-    username :string; // usr, hisFig(zkz,...)
+    username : string ; // usr, hisFig(zkz,...)
     avatarPath : string //
-    type: string; // text audio video
+    type: 'text' | 'audio' | 'video'; // text audio video
     data : string; // reserved for mp3 and mp4 and text
     time : number; // send time
 }
