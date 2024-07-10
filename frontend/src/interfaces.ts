@@ -5,7 +5,7 @@ export interface figureInfo {
 export interface message {
     username : string ; // usr, hisFig(zkz,...)
     avatarPath : string; //
-    sender: number;  // 0 for user, 1 for gpt 
+    flag: number;  // 1 for user, 0 for gpt 
     type: 'text' | 'audio' | 'video'; // text audio video
     data : string; // reserved for mp3 and mp4 and text
     time : number; // send time

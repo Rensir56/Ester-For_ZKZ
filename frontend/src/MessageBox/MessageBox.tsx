@@ -1,8 +1,15 @@
 import {message} from "../interfaces.ts";
-import {TextMessageBox} from "./TextMessageBox.tsx";
+import { MessageItem } from "./MessageItem.tsx";
 import {Avatar} from "antd";
+import "./MessageBox.css"
 
-export function MessageBox ({mes} : {mes : message}){
+
+export function MessageBox (props :message){
+    type ContentType = {
+        data: string;
+        type: "video" | "text" | "audio";
+    };
+
     const isZero = (num: number) => (num < 10 ? '0' : '') + num;
 
     const getDateTime = (timestamp:number): string => {
@@ -16,28 +23,42 @@ export function MessageBox ({mes} : {mes : message}){
         return `${year}/${month}/${day} ${hour}:${minute}:${seconds}`;
     };
 
+    const sender = props.username + '  ' + getDateTime(props.time);
     return (
         <>
             <div className="messageContainer">
-               <Avatar src={mes.avatarPath} ></Avatar>
                <div className="dataContainer">
-                   {
-                       mes.type == "text" ?
-                       (<div className="textMessage">
-                            <TextMessageBox words={mes.data}></TextMessageBox>
-                       </div>) : mes.type == "audio" ?
-                       (<div className="audioMessage">
-                           //TODO
-                       </div>) :
-                       (<div className="videoMessage">
-                           //TODO
-                       </div>)
-
-                   }
+               {props.flag === 0?
+                    (<div className="container left">
+                        <Avatar src={props.avatarPath} className="avatar"></Avatar>
+                        <div className="Message0">
+                            <div className="McontentWrapper0">
+                                <span className="sender-name0">{sender}</span>
+                                <div className="Mcontent0">
+                                    <MessageItem
+                                        data = {props.data}
+                                        type = {props.type}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>):
+                    (<div className="container right">
+                        <div className="Message1">
+                            <div className="McontentWrapper1">
+                                <span className="sender-name1">{sender}</span>
+                                <div className="Mcontent1">
+                                    <MessageItem
+                                        data = {props.data}
+                                        type = {props.type}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <Avatar src={props.avatarPath} className="avatar"></Avatar>
+                    </div>)
+                }
                </div>
-                <div className="messageTimeContainer">
-                    {getDateTime(mes.time)}
-                </div>
             </div>
         </>
     )
