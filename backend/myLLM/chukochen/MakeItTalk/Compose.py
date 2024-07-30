@@ -1,5 +1,3 @@
-import sys
-sys.path.append('thirdparty/AdaptiveWingLoss')
 import torch
 from typing import List
 from src.approaches.train_image_translation import Image_translation_block
