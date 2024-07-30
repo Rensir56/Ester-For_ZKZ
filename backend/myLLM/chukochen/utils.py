@@ -1,4 +1,4 @@
-
+from .MakeItTalk.Compose import Composer
 
 def get_voice_answer_by_llm(voice_str):
     print(f"receive data from front end: {voice_str}")

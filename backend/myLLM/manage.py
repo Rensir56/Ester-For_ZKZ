@@ -2,7 +2,8 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+sys.path.append("backend/myLLM/chukochen/MakeItTalk")
+sys.path.append("backend/myLLM/chukochen/MakeItTalk/thirdparty/AdaptiveWingLoss")
 
 def main():
     """Run administrative tasks."""
