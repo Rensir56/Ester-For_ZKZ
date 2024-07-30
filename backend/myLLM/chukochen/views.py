@@ -6,33 +6,20 @@ def index(request):
     return HttpResponse("Hello, world. You're at the chukochen index.")
 
 
-def read(request):
+def answer(request):
     if request.method == 'GET':
-        temp = request.GET.get('voice_str')
+        temp = request.GET.get('str')
         if temp is not None:
             return JsonResponse({"answer": get_voice_answer_by_llm(temp)}, status=200)
         else:
-            return JsonResponse({"error": "No voice string"}, status=400)
+            answer_type = request.GET.get('type')
+            if answer_type == 'text':
+                return JsonResponse({"answer": get_text_answer_by_llm(temp)}, status=200)
+            elif answer_type == 'voice':
+                return JsonResponse({"answer": get_voice_answer_by_llm(temp)}, status=200)
+            elif answer_type == 'video':
+                return JsonResponse({"answer": get_video_answer_by_llm(temp)}, status=200)
+            else:
+                return JsonResponse({"error":"Wrong Answer Type, Please Check Your Answer Type"}, status=200)
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
-# Create your views here.
-
-
-def write_answer(request):
-    if request.method == 'GET':
-        temp = request.GET.get('text_str')
-        if temp is not None:
-            return JsonResponse({"answer": get_text_answer_by_llm(temp)}, status=200)
-        else:
-            return JsonResponse({"error": "No Text Content"}, status = 400)
-    else:
-        return JsonResponse({"error": "Method not allowed"}, status = 405)
-
-
-def play(request):
-    if request.method == 'GET':
-        temp = request.GET.get('video_str')
-        if temp is not None:
-            return JsonResponse({"answer": get_video_answer_by_llm(temp)}, status=200)
-        else:
-            return JsonResponse({"error": "No video string"}, status=400)

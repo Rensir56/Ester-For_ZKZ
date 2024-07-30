@@ -1,0 +1,107 @@
+.container {
+    display: flex;
+    align-items: center; /* 垂直居中对齐 */
+}
+
+.left .avatar {
+    margin-right: 10px; /* 左侧布局：头像在左，消息在右 */
+}
+
+.right {
+    justify-content: flex-end; /* 右侧布局：消息在左，头像在右 */
+}
+
+.right .Message {
+    margin-right: 10px; /* 为了在右侧布局时保持间距 */
+}
+
+.Message0 {
+    margin-left: 20px;
+    margin-top: 10px;
+    width: 60%;
+    height: fit-content;
+    display: flex;
+    align-items: flex-start;
+}
+
+.Message1 {
+    margin-right: 20px;
+    margin-top: 10px;
+    width: 60%;
+    height: fit-content;
+    display: flex;
+    align-items: flex-start;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sender-cover {
+    border: solid 3px white;
+    border-radius: 50%;
+    position: relative;
+    top: 8px;
+    left: 5px;
+    width: 40px;
+    height: 40px;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sender-cover-title {
+    font-size: 15px;
+    color: white;
+}
+
+.McontentWrapper0 {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: fit-content;
+    float: left;
+}
+
+.McontentWrapper1 {
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: fit-content;
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sender-name0 {
+    width: fit-content;
+    color: rgb(58, 51, 51);
+    margin-bottom: 10px;
+}
+
+.sender-name1 {
+    width: fit-content;
+    color: rgb(58, 51, 51);
+    margin-bottom: 10px;
+    margin-left: auto;
+}
+
+.Mcontent0,
+.Mcontent1 {
+    width: fit-content;
+    height: fit-content;
+    margin-bottom: 10px;
+    word-break: break-all;
+    white-space: pre-wrap;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.Mcontent0 {
+    background-color: rgb(149, 236, 105);
+}
+
+.Mcontent1 {
+    background-color: rgb(147, 162, 216);
+    margin-left: auto;
+}
