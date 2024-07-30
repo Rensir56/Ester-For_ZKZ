@@ -53,7 +53,7 @@ class Composer:
             test_emb_path,
             au_mean_std_path
         )
-        self.a2v_G,self.a2l_model,self.translation_model = self.prepareModules(
+        self.face_predictor,self.a2v_G,self.a2l_model,self.translation_model = self.prepareModules(
             a2v_ckpt,
             a2l_G_ckpt,
             a2l_C_ckpt,
@@ -82,8 +82,8 @@ class Composer:
              shift
         '''
         img = cv2.imread(image_in)
-        predictor = face_alignment.FaceAlignment(face_alignment.LandmarksType._3D, device='cuda', flip_input=True)
-        shapes = predictor.get_landmarks(img)
+
+        shapes = self.face_predictor.get_landmarks(img)
         if not shapes or len(shapes) != 1:
             print('Cannot detect face landmarks. Exit.')
             exit(-1)
@@ -138,7 +138,8 @@ class Composer:
             del tmp
         comb_G.to(device)
         translation_model = Image_translation_block(opt_parser=None, single_test=True,comb_G=comb_G)
-        return a2v_G,a2l_model,translation_model
+        face_predictor = face_alignment.FaceAlignment(face_alignment.LandmarksType._3D, device='cuda', flip_input=True)
+        return face_predictor,a2v_G,a2l_model,translation_model
     def prepareEmbedding(
             self,
             id_emb_path : str,
