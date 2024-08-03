@@ -35,7 +35,7 @@ const App: React.FC = () => {
   const [currentFigure,setCurrentFigure] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<string>("text")
   const [loading, setLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",flag:1,type:"audio",data:"hello",time:0}]);
+  const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",flag:1,type:"text",data:"hello",time:0}]);
 
   const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
 
