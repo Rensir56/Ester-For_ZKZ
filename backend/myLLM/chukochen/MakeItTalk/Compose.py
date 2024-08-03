@@ -263,20 +263,20 @@ if __name__ == "__main__":
         audio_in="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/input/audio/M6_04_16k.wav" 
     )
     # id_emb, anchor_t_shape, test_emb = prepareEmbedding(
-        # id_emb_path="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/embedding/emb.txt",
-        # anchor_t_shape_path="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/embedding/STD_FACE_LANDMARKS.txt",
-        # test_emb_path="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/embedding/emb.pickle"
+        # id_emb_path="/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/embedding/emb.txt",
+        # anchor_t_shape_path="/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/embedding/STD_FACE_LANDMARKS.txt",
+        # test_emb_path="/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/embedding/emb.pickle"
     # )
     # a2v_G,a2l_model,translation_model = prepareModules(
-        # a2v_ckpt="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_autovc.pth",
-        # a2l_G_ckpt="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_speaker_branch.pth",
-        # a2l_C_ckpt="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_content_branch.pth",
-        # comb_G_ckpt="/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_116_i2i_comb.pth"
+        # a2v_ckpt="/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_autovc.pth",
+        # a2l_G_ckpt="/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_speaker_branch.pth",
+        # a2l_C_ckpt="/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_content_branch.pth",
+        # comb_G_ckpt="/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/ckpt/ckpt_116_i2i_comb.pth"
     # )
-    # au_emb = prepareAudio("/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/input/audio/M6_04_16k.wav",
+    # au_emb = prepareAudio("/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/input/audio/M6_04_16k.wav",
                 #  G=a2v_G,
                 #  emb=id_emb)
-    # img,shape_3d,scale,shift = prepareImage("/mnt/e/models/Ester-For_ZKZ/backend/myLLM/MakeItTalk/input/image/zkz2.jpg",
+    # img,shape_3d,scale,shift = prepareImage("/mnt/c/Users/耳东七月/PycharmProjects/Ester-For_ZKZ/backend/myLLM/MakeItTalk/input/image/zkz2.jpg",
                                         # face_std=anchor_t_shape)
     # amp_pos,amp_lip_x,amp_lip_y = .5, 2. ,2.
     # a2l_model.update_face(shape_3d)
