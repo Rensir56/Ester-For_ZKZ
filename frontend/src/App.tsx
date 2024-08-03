@@ -35,6 +35,7 @@ const App: React.FC = () => {
   const [currentFigure,setCurrentFigure] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<string>("text")
   const [loading, setLoading] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
   const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",flag:1,type:"text",data:"hello",time:0}]);
 
   const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
@@ -63,6 +64,8 @@ const App: React.FC = () => {
       } else if (currentMode === 'video') {
         url = `http://127.0.0.1:8000/chukochen/video?video_str=${value}`;
       }
+
+      setInputValue('');
   
       // 发送请求
       const response = await axios.get(url, {
@@ -156,8 +159,15 @@ const App: React.FC = () => {
             ))}
         </div>
         <div className="inputBox" style={{display: "flex", justifyContent: "center"}}>
-          <Search placeholder={"说点什么吧"} enterButton={"发送"} loading={loading} style={{position:"fixed" ,bottom: "10%", zIndex : 1, width:"50%"}} onSearch={onSearch}>
-          </Search>
+          <Search
+            placeholder="说点什么吧"
+            enterButton="发送"
+            loading={loading}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onSearch={onSearch}
+            style={{ position: "fixed", bottom: "10%", zIndex: 1, width: "50%" }}
+          />
         </div>
       </Content>
     </Layout>
