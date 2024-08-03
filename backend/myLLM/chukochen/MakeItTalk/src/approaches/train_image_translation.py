@@ -467,7 +467,7 @@ class Image_translation_block():
 
         if(filename is None):
             filename = 'v'
-        output_file_path = find_next_file("./output","out_",".mp4")
+        output_file_path = find_next_file("./chukochen/output","out_",".mp4")
         os.system(f'ffmpeg -loglevel error -y -i {"./temp/" + next_file} -i {"./input/audio/" + filename[9:-16] + ".wav"} -pix_fmt yuv420p -strict -2 {"./output/" + output_file_path}')
         # os.system('rm out.mp4')
         return output_file_path
