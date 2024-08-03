@@ -127,20 +127,8 @@ def on_open_param(wsParam, audio_dir):
             d = json.dumps(d)
             # print("------>开始发送文本数据")
             ws.send(d)
-            for filename in os.listdir(audio_dir):
-                if filename.endswith('.wav'):
-                    os.remove(os.path.join(audio_dir, filename))
+            if os.path.exists(f'{audio_dir}/input.wav'):
+                print("删掉残留文件")
+                os.remove(f'{audio_dir}/input.wav')
         thread.start_new_thread(run, ())
     return on_open
-
-
-# if __name__ == "__main__":
-#     wsParam = Ws_Param(APPID='7fe1e960', APISecret='ODU1MmZmZjg5ZDc0ZDYzYTg5MGJlNzdl',
-#                        APIKey='35db67ca3f4e905b5c6bc3197f4838ed',
-#                        Text="竺可桢")
-#     wsParam.generate_wav()
-#     websocket.enableTrace(False)
-#     wsUrl = wsParam.create_url()
-#     ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_error=on_error, on_close=on_close)
-#     ws.on_open = on_open
-#     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
