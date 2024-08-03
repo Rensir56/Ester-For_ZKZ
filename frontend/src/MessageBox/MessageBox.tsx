@@ -3,13 +3,7 @@ import { MessageItem } from "./MessageItem.tsx";
 import {Avatar} from "antd";
 import "./MessageBox.css"
 
-
 export function MessageBox (props :message){
-    type ContentType = {
-        data: string;
-        type: "video" | "text" | "audio";
-    };
-
     const isZero = (num: number) => (num < 10 ? '0' : '') + num;
 
     const getDateTime = (timestamp:number): string => {

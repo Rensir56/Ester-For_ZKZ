@@ -12,7 +12,9 @@
   "dependencies": {
     "@arco-design/web-react": "^2.63.1",
     "@chatui/core": "^2.4.2",
+    "@types/node": "^20.14.10",
     "antd": "^5.19.0",
+    "axios": "^1.7.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
