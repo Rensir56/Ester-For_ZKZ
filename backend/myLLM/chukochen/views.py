@@ -18,7 +18,7 @@ def answer(request):
                 return JsonResponse({"answer": result}, status=200)
             except Exception as e:
                 print(e)
-                return JsonResponse({"error": "Failed to generate answer!"}, status=200)
+                return JsonResponse({"error": "Failed to generate text answer!"}, status=200)
         elif answer_type == 'voice':
             try:
                 result = get_voice_answer_by_llm(temp)

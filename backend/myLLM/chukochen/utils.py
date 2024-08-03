@@ -38,7 +38,6 @@ def get_voice_answer_by_llm(voice_str):
 def get_text_answer_by_llm(text):
     print(f"receive data from front end: {text}")
     if type(text) is str:
-        # 后面添加对接模型的业务逻辑
         try:
             text_answer = text_generator(text)
             if text_answer["success"]:
@@ -54,7 +53,10 @@ def get_text_answer_by_llm(text):
 def get_video_answer_by_llm(video_str):
     print(f"receive data from front end: {video_str}")
     if type(video_str) is str:
-        generate_voice_by_xf(video_str)
+        if text_generator(video_str)["success"]:
+            generate_voice_by_xf(text_generator(video_str)["response"])
+        else:
+            return "Failed to generate original text!"
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "MakeItTalk"))
         output_filenames = settings.COMPOSER_INSTANCE.compose(
             image_id=0,
