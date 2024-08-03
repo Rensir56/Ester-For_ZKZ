@@ -7,7 +7,8 @@ import {AppstoreOutlined,MailOutlined} from "@ant-design/icons"
 import {defaultUsr, figures} from "./CONST.ts";
 import {message} from "./interfaces.ts"
 import {MessageBox} from "./MessageBox/MessageBox.tsx";
-import {Message} from "@arco-design/web-react";
+import axios from 'axios';
+
 const {Header,Content,Sider} = Layout
 const {Search} = Input
 type MenuItem = Required<MenuProps>['items'][number];
@@ -34,25 +35,72 @@ const App: React.FC = () => {
   const [currentFigure,setCurrentFigure] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<string>("text")
   const [loading, setLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",flag:1,type:"text",data:"yes",time:1111111111111}]);
+  const [messages, setMessages] = useState<message[]>([{username:"rwy",avatarPath:"",flag:1,type:"audio",data:"hello",time:0}]);
 
   const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
-  const onSearch = (value: string) => {
-    setLoading(!loading)
-    // send requests here according to currentMode(API) and currentFigure(request content)
-    //TODO
-    setMessages([...messages,{
-      type : 'text',
-      data : value,
-      flag : 0,
-      avatarPath : defaultUsr.avatarPath,
-      username : defaultUsr.username,
-      time  : Date.now()
-    }])
-  }
+
+  const onSearch = async (value: string) => {
+    // 将用户消息添加到 messages 数组
+    setMessages(prevMessages => [...prevMessages, {
+      type: 'text',
+      data: value,
+      flag: 1,
+      avatarPath: defaultUsr.avatarPath,
+      username: defaultUsr.username,
+      time: Date.now()
+    }]);
+  
+    // 设置 loading 为 true
+    setLoading(true);
+  
+    try {
+      // 配置请求
+      let url = '';
+      if (currentMode === 'text') {
+        url = `http://127.0.0.1:8000/chukochen/text?text_str=${value}`;
+      } else if (currentMode === 'audio') {
+        url = `http://127.0.0.1:8000/chukochen/voice?voice_str=${value}`;
+      } else if (currentMode === 'video') {
+        url = `http://127.0.0.1:8000/chukochen/video?video_str=${value}`;
+      }
+  
+      // 发送请求
+      const response = await axios.get(url, {
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://apifox.com)'
+        }
+      });
+  
+      // 处理响应数据
+      const responseData = response.data;
+      let responseType: 'text' | 'audio' | 'video' = 'text';
+      if (currentMode === 'audio') {
+        responseType = 'audio';
+      } else if (currentMode === 'video') {
+        responseType = 'video';
+      }
+  
+      // 将返回的消息添加到 messages 数组
+      setMessages(prevMessages => [...prevMessages, {
+        type: responseType,
+        data: responseData,
+        flag: 0, // 0 表示来自后端的消息
+        avatarPath: '', // 可以为后端响应设置一个默认头像路径
+        username: 'GPT', // 可以为后端响应设置一个默认用户名
+        time: Date.now()
+      }]);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      // 设置 loading 为 false
+      setLoading(false);
+    }
+  };
+
   const chooseFigure = (val : string) => {
     setCurrentFigure(val)
   }
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -66,7 +114,9 @@ const App: React.FC = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
   const [collapsed ,setCollapsed] = useState(false);
+
   return (
   <Layout style={{minHeight: '100vh'}}>
     <Header style={{
