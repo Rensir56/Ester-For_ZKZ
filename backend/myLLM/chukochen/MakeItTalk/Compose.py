@@ -2,7 +2,7 @@ import torch
 from typing import List
 from src.approaches.train_image_translation import Image_translation_block
 import numpy as np
-from torch import  nn
+from torch import nn
 import pickle
 import cv2
 import face_alignment
@@ -16,6 +16,7 @@ from src.dataset.audio2landmark.audio2landmark_dataset import Audio2landmark_Dat
 from src.models.model_audio2landmark import Audio2landmark_pos, Audio2landmark_content
 from src.approaches.train_audio2landmark import Audio2landmark_model
 from src.models.model_image_translation import ResUnetGenerator
+
 
 def find_next_file(folder_path, prefix="tmp_", extension=""):
     files = os.listdir(folder_path)
@@ -31,6 +32,8 @@ def find_next_file(folder_path, prefix="tmp_", extension=""):
         next_number = 1
     next_file = f"{prefix}{next_number}{extension}"
     return next_file
+
+
 class Composer:
     def __init__(
         self,
@@ -64,8 +67,9 @@ class Composer:
             self.imgs_prop.append(self.prepareImage(
                 image_path,
                 face_std = self.anchor_t_shape
-            )) 
-        
+            ))
+
+
     def prepareImage(
             self,   
             image_in: str,
@@ -105,41 +109,50 @@ class Composer:
     ):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         a2v_G = Generator(16, 256, 512, 16).eval().to(device)
-        g_checkpoint = torch.load(a2v_ckpt, map_location=device)
-        a2v_G.load_state_dict(g_checkpoint['model'])
+
+        if a2v_ckpt:
+            g_checkpoint = torch.load(a2v_ckpt, map_location=device)
+            a2v_G.load_state_dict(g_checkpoint['model'])
+
         a2l_G = Audio2landmark_pos(drop_out=0.5,
-                                    spk_emb_enc_size=128,
-                                    c_enc_hidden_size=256,
-                                    transformer_d_model=32, N=2, heads=2,
-                                    z_size=128, audio_dim=256)
-        model_dict = a2l_G.state_dict()
-        ckpt = torch.load(a2l_G_ckpt)
-        pretrained_dict = {k: v for k, v in ckpt['G'].items() if k.split('.')[0] not in ['comb_mlp']}
-        model_dict.update(pretrained_dict)
-        a2l_G.load_state_dict(model_dict)
+                                   spk_emb_enc_size=128,
+                                   c_enc_hidden_size=256,
+                                   transformer_d_model=32, N=2, heads=2,
+                                   z_size=128, audio_dim=256)
+        if a2l_G_ckpt:
+            model_dict = a2l_G.state_dict()
+            ckpt = torch.load(a2l_G_ckpt)
+            pretrained_dict = {k: v for k, v in ckpt['G'].items() if k.split('.')[0] not in ['comb_mlp']}
+            model_dict.update(pretrained_dict)
+            a2l_G.load_state_dict(model_dict)
         a2l_G.to(device)
-        
+
         a2l_C = Audio2landmark_content(num_window_frames=18,
-                                        in_size=80, use_prior_net=True,
-                                        bidirectional=False, drop_out=0.5)
-        ckpt = torch.load(a2l_C_ckpt)
-        a2l_C.load_state_dict(ckpt['model_g_face_id'])
+                                       in_size=80, use_prior_net=True,
+                                       bidirectional=False, drop_out=0.5)
+        if a2l_C_ckpt:
+            ckpt = torch.load(a2l_C_ckpt)
+            a2l_C.load_state_dict(ckpt['model_g_face_id'])
         a2l_C.to(device)
-        a2l_model = Audio2landmark_model(None,None,a2l_G,a2l_C)
+        a2l_model = Audio2landmark_model(None, None, a2l_G, a2l_C)
         a2l_model.update_test_emb(self.test_emb)
-        ckpt = torch.load(comb_G_ckpt)
+
         comb_G = ResUnetGenerator(input_nc=6, output_nc=3, num_downs=6, use_dropout=False)
-        try:
-            comb_G.load_state_dict(ckpt['G'])
-        except:
-            tmp = nn.DataParallel(comb_G)
-            tmp.load_state_dict(ckpt['G'])
-            comb_G.load_state_dict(tmp.module.state_dict())
-            del tmp
+        if comb_G_ckpt:
+            ckpt = torch.load(comb_G_ckpt)
+            try:
+                comb_G.load_state_dict(ckpt['G'])
+            except:
+                tmp = nn.DataParallel(comb_G)
+                tmp.load_state_dict(ckpt['G'])
+                comb_G.load_state_dict(tmp.module.state_dict())
+                del tmp
         comb_G.to(device)
-        translation_model = Image_translation_block(opt_parser=None, single_test=True,comb_G=comb_G)
+        translation_model = Image_translation_block(opt_parser=None, single_test=True, comb_G=comb_G)
+
         face_predictor = face_alignment.FaceAlignment(face_alignment.LandmarksType._3D, device='cuda', flip_input=True)
-        return face_predictor,a2v_G,a2l_model,translation_model
+        return face_predictor, a2v_G, a2l_model, translation_model
+
     def prepareEmbedding(
             self,
             id_emb_path : str,

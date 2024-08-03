@@ -8,18 +8,36 @@ def index(request):
 
 def answer(request):
     if request.method == 'GET':
+        answer_type = request.GET.get('type')
+        if request.GET.get("str") == "":
+            return JsonResponse({"error": "No Contents in your question"}, status=200)
         temp = request.GET.get('str')
-        if temp is not None:
-            return JsonResponse({"answer": get_voice_answer_by_llm(temp)}, status=200)
+        if answer_type == 'text':
+            try:
+                result = get_text_answer_by_llm(temp)
+                return JsonResponse({"answer": result}, status=200)
+            except Exception as e:
+                print(e)
+                return JsonResponse({"error": "Failed to generate answer!"}, status=200)
+        elif answer_type == 'voice':
+            try:
+                result = get_voice_answer_by_llm(temp)
+                response = HttpResponse(result, content_type='application/octet-stream',status=200)
+                response['Content-Disposition'] = 'inline; filename="example.txt"'
+                return response
+            except Exception as e:
+                print(e)
+                return JsonResponse({"error": "Failed to generate answer!"}, status=200)
+        elif answer_type == 'video':
+            try:
+                result = get_video_answer_by_llm(temp)
+                response = HttpResponse(result, content_type='application/octet-stream',status=200)
+                response['Content-Disposition'] = 'inline; filename="example.txt"'
+                return response
+            except Exception as e:
+                print(e)
+                return JsonResponse({"error": "Failed to generate answer!"}, status=200)
         else:
-            answer_type = request.GET.get('type')
-            if answer_type == 'text':
-                return JsonResponse({"answer": get_text_answer_by_llm(temp)}, status=200)
-            elif answer_type == 'voice':
-                return JsonResponse({"answer": get_voice_answer_by_llm(temp)}, status=200)
-            elif answer_type == 'video':
-                return JsonResponse({"answer": get_video_answer_by_llm(temp)}, status=200)
-            else:
-                return JsonResponse({"error":"Wrong Answer Type, Please Check Your Answer Type"}, status=200)
+            return JsonResponse({"error":"Wrong Answer Type, Please Check Your Answer Type"}, status=200)
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
