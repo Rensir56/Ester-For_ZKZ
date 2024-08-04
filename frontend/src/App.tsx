@@ -41,61 +41,54 @@ const App: React.FC = () => {
   const chooseMode : MenuProps["onClick"] = (e) => { setCurrentMode(e.key)}
 
   const onSearch = async (value: string) => {
-    // 将用户消息添加到 messages 数组
-    setMessages(prevMessages => [...prevMessages, {
-      type: 'text',
-      data: value,
-      flag: 1,
-      avatarPath: defaultUsr.avatarPath,
-      username: defaultUsr.username,
-      time: Date.now()
-    }]);
-  
-    // 设置 loading 为 true
-    setLoading(true);
-  
-    try {
-      // 配置请求
-      let url = '';
-      if (currentMode === 'text') {
-        url = `http://127.0.0.1:8000/chukochen/text?text_str=${value}`;
-      } else if (currentMode === 'audio') {
-        url = `http://127.0.0.1:8000/chukochen/voice?voice_str=${value}`;
-      } else if (currentMode === 'video') {
-        url = `http://127.0.0.1:8000/chukochen/video?video_str=${value}`;
+    setMessages([
+      ...messages,
+      {
+        type: 'text',
+        data: value,
+        flag: 1,
+        avatarPath: 'defaultUsrAvatarPath', // 使用实际默认用户的头像路径
+        username: 'defaultUsrUsername',    // 使用实际默认用户名
+        time: Date.now()
       }
+    ]);
 
-      setInputValue('');
-  
-      // 发送请求
-      const response = await axios.get(url, {
-        headers: {
-          'User-Agent': 'Apifox/1.0.0 (https://apifox.com)'
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/chukochen/answer?str=${encodeURIComponent(value)}&type=${currentMode}`,
+        {
+          headers: {
+            'User-Agent': 'Apifox/1.0.0 (https://apifox.com)'
+          }
         }
-      });
-  
-      // 处理响应数据
-      const responseData = response.data;
+      );
+
+      const responseData = response.data.answer;
+
       let responseType: 'text' | 'audio' | 'video' = 'text';
       if (currentMode === 'audio') {
         responseType = 'audio';
       } else if (currentMode === 'video') {
         responseType = 'video';
       }
-  
-      // 将返回的消息添加到 messages 数组
-      setMessages(prevMessages => [...prevMessages, {
-        type: responseType,
-        data: responseData,
-        flag: 0, // 0 表示来自后端的消息
-        avatarPath: '', // 可以为后端响应设置一个默认头像路径
-        username: 'GPT', // 可以为后端响应设置一个默认用户名
-        time: Date.now()
-      }]);
+
+      setMessages(prevMessages => [
+        ...prevMessages,
+        {
+          type: responseType,
+          data: responseData,
+          flag: 0,
+          avatarPath: '', // 使用实际的 GPT 头像路径
+          username: 'GPT', // 发送者标识
+          time: Date.now()
+        }
+      ]);
+
+      setInputValue(''); // 清空输入框
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
-      // 设置 loading 为 false
       setLoading(false);
     }
   };
