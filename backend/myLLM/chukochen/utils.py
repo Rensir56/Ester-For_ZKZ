@@ -6,7 +6,8 @@ from django.conf import settings
 from .WordToWav.ToWave import Ws_Param
 from http import HTTPStatus
 import dashscope
-dashscope.api_key ="sk-ecc1cff623fe4c91975ce625767074a6"
+from dashscope import Application
+dashscope.api_key ="sk-87765b0793374f5cb831e625407e2702"
 
 
 def generate_voice_by_xf(str):
@@ -72,9 +73,10 @@ def get_video_answer_by_llm(video_str):
 
 
 def text_generator(text):
-    response = dashscope.Generation.call(model='qwen-turbo',
-                                           messages=[{'role': 'user', 'content': text}],
-                                           )
+    response = Application.call(app_id='f655aa1c24674d2d9df3f1975a848e3c',
+                                prompt=text,
+                                )
+    print(response)
     if response.status_code == HTTPStatus.OK:
         print(response)
         resp = response.output.text
