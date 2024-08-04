@@ -1,0 +1,13 @@
+django
+beautifulsoup4
+dashscope
+markdown
+websocket
+websocket-client
+hashlib
+base64
+urllib3
+hmac
+ssl
+wsgiref
+http
