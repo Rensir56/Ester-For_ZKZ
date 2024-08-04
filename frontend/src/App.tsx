@@ -20,7 +20,7 @@ const items: MenuItem[] = [
   },
   {
     label: '语音对话',
-    key: 'audio',
+    key: 'voice',
     icon: <MailOutlined />,
   },
   {
@@ -47,8 +47,8 @@ const App: React.FC = () => {
         type: 'text',
         data: value,
         flag: 1,
-        avatarPath: 'defaultUsrAvatarPath', // 使用实际默认用户的头像路径
-        username: 'defaultUsrUsername',    // 使用实际默认用户名
+        avatarPath: defaultUsr.avatarPath, // 使用实际默认用户的头像路径
+        username: defaultUsr.username,    // 使用实际默认用户名
         time: Date.now()
       }
     ]);
@@ -67,9 +67,9 @@ const App: React.FC = () => {
 
       const responseData = response.data.answer;
 
-      let responseType: 'text' | 'audio' | 'video' = 'text';
-      if (currentMode === 'audio') {
-        responseType = 'audio';
+      let responseType: 'text' | 'voice' | 'video' = 'text';
+      if (currentMode === 'voice') {
+        responseType = 'voice';
       } else if (currentMode === 'video') {
         responseType = 'video';
       }

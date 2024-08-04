@@ -4,7 +4,7 @@ import "./MessageItem.css";
 
 type ContentType = {
   data: string;
-  type: "video" | "text" | "audio";
+  type: "video" | "text" | "voice";
 };
 
 export function MessageItem(props: ContentType) {
@@ -54,17 +54,22 @@ export function MessageItem(props: ContentType) {
     if (audioElement) {
       audioElement.onended = () => setIsPlaying(false);
     }
-
-    if (type === "audio" || type === "video") {
-      const mimeType = type === "audio" ? "audio/mpeg" : "video/mp4";
-      const blob = base64ToBlob(data, mimeType);
-      const url = URL.createObjectURL(blob);
-      setMediaSource(url);
-
-      // 清理 URL 对象
-      return () => URL.revokeObjectURL(url);
+  
+    if ((type === "voice" || type === "video") && data) {
+      try {
+        const mimeType = type === "voice" ? "audio/mpeg" : "video/mp4";
+        const blob = base64ToBlob(data, mimeType);
+        const url = URL.createObjectURL(blob);
+        setMediaSource(url);
+  
+        // 清理 URL 对象
+        return () => URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Failed to create media source:", error);
+      }
     }
   }, [data, type]);
+  
 
   if (type === "video" && mediaSource) {
     return (
@@ -88,7 +93,7 @@ export function MessageItem(props: ContentType) {
     );
   } else if (type === "text") {
     return <span>{data}</span>;
-  } else if (type === "audio" && mediaSource) {
+  } else if (type === "voice" && mediaSource) {
     return (
       <div className="audio-message" onClick={togglePlay}>
         <div className={`audio-icon ${isPlaying ? 'playing' : ''}`}>
