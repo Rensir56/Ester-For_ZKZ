@@ -22,18 +22,14 @@ def answer(request):
         elif answer_type == 'voice':
             try:
                 result = get_voice_answer_by_llm(temp)
-                response = HttpResponse(result, content_type='application/octet-stream',status=200)
-                response['Content-Disposition'] = 'inline; filename="example.txt"'
-                return response
+                return JsonResponse({"answer": result}, status=200)
             except Exception as e:
                 print(e)
                 return JsonResponse({"error": "Failed to generate answer!"}, status=200)
         elif answer_type == 'video':
             try:
                 result = get_video_answer_by_llm(temp)
-                response = HttpResponse(result, content_type='application/octet-stream',status=200)
-                response['Content-Disposition'] = 'inline; filename="example.txt"'
-                return response
+                return JsonResponse({"answer": result}, status=200)
             except Exception as e:
                 print(e)
                 return JsonResponse({"error": "Failed to generate answer!"}, status=200)
