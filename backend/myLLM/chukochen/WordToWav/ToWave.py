@@ -85,7 +85,10 @@ class Ws_Param(object):
             total_audio_code += base64.b64decode(i)
         with open(f'{audio_dir}/input.wav', 'wb') as f:
             f.write(total_audio_code)
-        return result
+        resp_str = ""
+        for i in result:
+            resp_str += i
+        return resp_str
 
 
 def get_total_message(result):

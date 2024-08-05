@@ -1,3 +1,5 @@
+import base64
+
 import markdown
 from bs4 import BeautifulSoup
 import sys
@@ -59,15 +61,20 @@ def get_video_answer_by_llm(video_str):
         else:
             return "Failed to generate original text!"
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "MakeItTalk"))
+        result_bytes = b''
+        # output_filenames = [
+        #     os.path.join(os.path.dirname(__file__), "output/out_1.mp4"),
+        #     os.path.join(os.path.dirname(__file__), "output/out_2.mp4")
+        # ]
         output_filenames = settings.COMPOSER_INSTANCE.compose(
             image_id=0,
             audio_in=os.path.dirname(os.path.abspath(__file__)) + "/input/audio/input.wav"
         )
-        result_bytes = []
         for filename in output_filenames:
             with open(filename, 'rb') as f:
-                result_bytes.append(f.read())
-        return result_bytes
+                result_bytes += base64.b64encode(f.read())
+        # print(result_bytes)
+        return result_bytes.decode('utf-8')
     else:
         return "Not A Correct String for Video!"
 
