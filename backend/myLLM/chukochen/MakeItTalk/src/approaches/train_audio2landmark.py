@@ -271,7 +271,7 @@ class Audio2landmark_model():
                 if(vis_fls):
                     from util.vis import Vis
                     Vis(fls=fake_fls_np, filename=video_name.split('\\')[-1].split('/')[-1], fps=62.5,
-                        audio_filenam=os.path.join('./input/audio', video_name.split('\\')[-1].split('/')[-1]+'.wav'))
+                        audio_filenam=os.path.join('../media/audio', video_name.split('\\')[-1].split('/')[-1]+'.wav'))
         return filenames
 
 

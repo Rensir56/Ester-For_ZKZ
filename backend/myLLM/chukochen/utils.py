@@ -56,31 +56,32 @@ def get_text_answer_by_llm(text):
 def get_video_answer_by_llm(video_str):
     print(f"receive data from front end: {video_str}")
     if type(video_str) is str:
-        # if text_generator(video_str)["success"]:
-        #     generate_voice_by_xf(text_generator(video_str)["response"])
-        # else:
-        #     return "Failed to generate original text!"
+        if text_generator(video_str)["success"]:
+            audio_file_name = generate_voice_by_xf(text_generator(video_str)["response"])["link"]
+        else:
+            return "Failed to generate original text!"
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "MakeItTalk"))
         # output_filenames = [
         #     os.path.join(os.path.dirname(__file__), "output/out_6.mp4")
         # ]
         output_filenames = settings.COMPOSER_INSTANCE.compose(
             image_id=0,
-            audio_in=os.path.join(os.path.dirname(os.path.abspath(__file__)), "../media/audio/input.wav")
+            audio_in=os.path.join(os.path.dirname(os.path.abspath(__file__)), f"..{audio_file_name}")
         )
-        # 删除media文件夹下原来所有的文件
-        for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), "../media/video")):
-            for name in files:
-                os.remove(os.path.join(root, name))
-        # 将output_filenames下的内容转存到media文件夹下
-        ts = time.time()
-        target = open(os.path.join(os.path.dirname(__file__), f"../media/video/{ts}.mp4"), 'wb+')
-        for filename in output_filenames:
-            file = open(filename, 'rb+')
-            target.write(file.read())
-            file.close()
-        target.close()
-        return {"link": f"/media/video/{ts}.mp4" }
+        print("模型输出文件名：", output_filenames)
+        # # 删除media文件夹下原来所有的文件
+        # for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), "../media/video")):
+        #     for name in files:
+        #         os.remove(os.path.join(root, name))
+        # # 将output_filenames下的内容转存到media文件夹下
+        # ts = time.time()
+        # target = open(os.path.join(os.path.dirname(__file__), f"../media/video/{ts}.mp4"), 'wb+')
+        # for filename in output_filenames:
+        #     file = open(filename, 'rb+')
+        #     target.write(file.read())
+        #     file.close()
+        # target.close()
+        return {"link": f"/media/video/{output_filenames[0]}" }
     else:
         return "Not A Correct String for Video!"
 
@@ -89,7 +90,6 @@ def text_generator(text):
     response = Application.call(app_id='f655aa1c24674d2d9df3f1975a848e3c',
                                 prompt=text,
                                 )
-    print(response)
     if response.status_code == HTTPStatus.OK:
         print(response)
         resp = response.output.text
