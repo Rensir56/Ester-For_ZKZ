@@ -9,7 +9,8 @@ from .WordToWav.ToWave import Ws_Param
 from http import HTTPStatus
 import dashscope
 from dashscope import Application
-dashscope.api_key ="sk-87765b0793374f5cb831e625407e2702"
+
+dashscope.api_key = "sk-87765b0793374f5cb831e625407e2702"
 
 
 def generate_voice_by_xf(str):
@@ -18,9 +19,8 @@ def generate_voice_by_xf(str):
         wsParam = Ws_Param(APPID='7fe1e960', APISecret='ODU1MmZmZjg5ZDc0ZDYzYTg5MGJlNzdl',
                            APIKey='35db67ca3f4e905b5c6bc3197f4838ed',
                            Text=str)
-        result_bytes = wsParam.generate_wav(audio_dir='input/audio')
-        print(result_bytes)
-        return result_bytes
+        wsParam.generate_wav(audio_dir='../media/audio')
+        return {"link": "/media/audio/input.wav"}
     except Exception as e:
         print(e)
         return "Failed to generate voice!"
@@ -68,13 +68,16 @@ def get_video_answer_by_llm(video_str):
         # ]
         output_filenames = settings.COMPOSER_INSTANCE.compose(
             image_id=0,
-            audio_in=os.path.dirname(os.path.abspath(__file__)) + "/input/audio/input.wav"
+            audio_in=os.path.join(os.path.dirname(os.path.abspath(__file__)), "../media/audio/input.wav")
         )
+        # 将output_filenames下的内容转存到media文件夹下
+        target = open(os.path.join(os.path.dirname(__file__), "../media/video/" + "output.mp4", 'w+'))
         for filename in output_filenames:
-            with open(filename, 'rb') as f:
-                result_bytes += base64.b64encode(f.read())
-        # print(result_bytes)
-        return result_bytes.decode('utf-8')
+            file = open(filename, 'r')
+            target.write(file.read())
+            file.close()
+        target.close()
+        return {"link": "/media/video/output.mp4" }
     else:
         return "Not A Correct String for Video!"
 
@@ -91,5 +94,6 @@ def text_generator(text):
         soup = BeautifulSoup(html, 'html.parser')
         return {"success": True, "response": soup.text.replace('\n', '')}
     else:
-        print('Failed request_id: %s, status_code: %s, code: %s, message:%s' %(response.request_id, response.status_code, response.code,response.message))
+        print('Failed request_id: %s, status_code: %s, code: %s, message:%s' % (
+        response.request_id, response.status_code, response.code, response.message))
         return {"success": False, "response": response.message}
