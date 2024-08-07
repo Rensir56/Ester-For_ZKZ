@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Modal } from 'antd';
 import "./MessageItem.css";
 
@@ -11,7 +11,6 @@ export function MessageItem(props: ContentType) {
   const { data, type } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [mediaSource, setMediaSource] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -39,39 +38,7 @@ export function MessageItem(props: ContentType) {
     }
   };
 
-  const base64ToBlob = (base64: string, mime: string): Blob => {
-    const byteString = atob(base64.split(',')[1]);
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mime });
-  };
-
-  useEffect(() => {
-    const audioElement = audioRef.current;
-    if (audioElement) {
-      audioElement.onended = () => setIsPlaying(false);
-    }
-  
-    if ((type === "voice" || type === "video") && data) {
-      try {
-        const mimeType = type === "voice" ? "audio/mpeg" : "video/mp4";
-        const blob = base64ToBlob(data, mimeType);
-        const url = URL.createObjectURL(blob);
-        setMediaSource(url);
-  
-        // 清理 URL 对象
-        return () => URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error("Failed to create media source:", error);
-      }
-    }
-  }, [data, type]);
-  
-
-  if (type === "video" && mediaSource) {
+  if (type === "video" && data) {
     return (
       <>
         <Button type="primary" onClick={showModal}>
@@ -85,7 +52,7 @@ export function MessageItem(props: ContentType) {
           centered
         >
           <video controls width="100%">
-            <source src={mediaSource} type="video/mp4" />
+            <source src={`data:video/mp4;base64,${data}`} type="video/mp4" />
             您的浏览器不支持视频标签。
           </video>
         </Modal>
@@ -93,7 +60,7 @@ export function MessageItem(props: ContentType) {
     );
   } else if (type === "text") {
     return <span>{data}</span>;
-  } else if (type === "voice" && mediaSource) {
+  } else if (type === "voice" && data) {
     return (
       <div className="audio-message" onClick={togglePlay}>
         <div className={`audio-icon ${isPlaying ? 'playing' : ''}`}>
@@ -101,7 +68,7 @@ export function MessageItem(props: ContentType) {
           <span className={`audio-dot ${isPlaying ? 'animate' : ''}`}></span>
           <span className={`audio-dot ${isPlaying ? 'animate' : ''}`}></span>
         </div>
-        <audio ref={audioRef} src={mediaSource} />
+        <audio ref={audioRef} src={`data:audio/mpeg;base64,${data}`} />
       </div>
     );
   } else {
