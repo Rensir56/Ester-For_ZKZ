@@ -14,10 +14,10 @@ class ChukochenConfig(AppConfig):
         from .MakeItTalk.Compose import Composer
         print(os.path.dirname(os.path.abspath(__file__)))
         settings.COMPOSER_INSTANCE = Composer(
-            a2v_ckpt=None, #os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_autovc.pth",
-            a2l_G_ckpt=None, #os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_speaker_branch.pth",
-            a2l_C_ckpt=None, #os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_content_branch.pth",
-            comb_G_ckpt=None, #os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_116_i2i_comb.pth",
+            a2v_ckpt=os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_autovc.pth",
+            a2l_G_ckpt=os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_speaker_branch.pth",
+            a2l_C_ckpt=os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_content_branch.pth",
+            comb_G_ckpt=os.path.dirname(os.path.abspath(__file__))+"/MakeItTalk/ckpt/ckpt_116_i2i_comb.pth",
 
             id_emb_path=os.path.dirname(os.path.abspath(__file__))+"/embedding/emb.txt",
             anchor_t_shape_path=os.path.dirname(os.path.abspath(__file__))+"/embedding/STD_FACE_LANDMARKS.txt",
