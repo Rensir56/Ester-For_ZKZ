@@ -83,12 +83,14 @@ class Ws_Param(object):
         total_audio_code = b''
         for i in result:
             total_audio_code += base64.b64decode(i)
-        with open(f'{audio_dir}/input.wav', 'wb') as f:
+        ts = time.time()
+        with open(f'{audio_dir}/{ts}.wav', 'wb') as f:
             f.write(total_audio_code)
-        resp_str = ""
-        for i in result:
-            resp_str += i
-        return resp_str
+        return f'{ts}.wav'
+        # resp_str = ""
+        # for i in result:
+        #     resp_str += i
+        # return resp_str
 
 
 def get_total_message(result):
@@ -130,8 +132,9 @@ def on_open_param(wsParam, audio_dir):
             d = json.dumps(d)
             # print("------>开始发送文本数据")
             ws.send(d)
-            if os.path.exists(f'{audio_dir}/input.wav'):
-                print("删掉残留文件")
-                os.remove(f'{audio_dir}/input.wav')
+            # 把目标文件夹下的文件全部删除
+            for root, dirs, files in os.walk(audio_dir):
+                for name in files:
+                    os.remove(os.path.join(root, name))
         thread.start_new_thread(run, ())
     return on_open
