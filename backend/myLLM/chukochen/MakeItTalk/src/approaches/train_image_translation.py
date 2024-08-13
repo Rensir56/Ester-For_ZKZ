@@ -424,7 +424,7 @@ class Image_translation_block():
             fls[:, 0::3] += 130
             fls[:, 1::3] += 80
         next_file = find_next_file("./temp","out_",".mp4")
-        writer = cv2.VideoWriter("./temp/" + next_file, cv2.VideoWriter_fourcc(*'mjpg'), 62.5, (256 * 3, 256))
+        writer = cv2.VideoWriter("./temp/" + next_file, cv2.VideoWriter_fourcc(*'mjpg'), 62.5, (256 , 256))
 
         for i, frame in enumerate(fls):
 

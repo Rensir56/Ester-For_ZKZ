@@ -3,7 +3,7 @@ import { Button, Modal } from 'antd';
 import "./MessageItem.css";
 
 type ContentType = {
-  data: string;
+  data: string; // mediaUrl
   type: "video" | "text" | "voice";
 };
 
@@ -52,7 +52,7 @@ export function MessageItem(props: ContentType) {
           centered
         >
           <video controls width="100%">
-            <source src={`data:video/mp4;base64,${data}`} type="video/mp4" />
+            <source src={data} type="video/mp4" />
             您的浏览器不支持视频标签。
           </video>
         </Modal>
@@ -68,7 +68,7 @@ export function MessageItem(props: ContentType) {
           <span className={`audio-dot ${isPlaying ? 'animate' : ''}`}></span>
           <span className={`audio-dot ${isPlaying ? 'animate' : ''}`}></span>
         </div>
-        <audio ref={audioRef} src={`data:audio/mpeg;base64,${data}`} />
+        <audio ref={audioRef} src={data} />
       </div>
     );
   } else {
