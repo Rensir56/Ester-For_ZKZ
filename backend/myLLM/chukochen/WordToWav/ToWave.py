@@ -32,7 +32,7 @@ class Ws_Param(object):
         # 公共参数(common)
         self.CommonArgs = {"app_id": self.APPID}
         # 业务参数(business)，更多个性化参数可在官网查看
-        self.BusinessArgs = {"aue": "lame", "sfl": 1,"auf": "audio/L16;rate=16000", "vcn": "xiaoyan", "tte": "utf8"}
+        self.BusinessArgs = {"aue": "lame", "sfl": 1,"auf": "audio/L16;rate=16000", "vcn": "x4_lingbosong", "tte": "utf8"}
         self.Data = {"status": 2, "text": str(base64.b64encode(self.Text.encode('utf-8')), "UTF8")}
         #使用小语种须使用以下方式，此处的unicode指的是 utf16小端的编码方式，即"UTF-16LE"”
         #self.Data = {"status": 2, "text": str(base64.b64encode(self.Text.encode('utf-16')), "UTF8")}

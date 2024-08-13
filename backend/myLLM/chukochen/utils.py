@@ -16,8 +16,8 @@ dashscope.api_key = "sk-87765b0793374f5cb831e625407e2702"
 def generate_voice_by_xf(str):
     print(os.path.dirname(__file__))
     try:
-        wsParam = Ws_Param(APPID='7fe1e960', APISecret='ODU1MmZmZjg5ZDc0ZDYzYTg5MGJlNzdl',
-                           APIKey='35db67ca3f4e905b5c6bc3197f4838ed',
+        wsParam = Ws_Param(APPID='c0d0ce4a', APISecret='YmY0M2E5ZWQ0MzI4OWZlYmY4ODVlYjkw',
+                           APIKey='e01a75eaadd19965538d6150c01f337a',
                            Text=str)
         final_url = wsParam.generate_wav(audio_dir='../media/audio')
         return {"link": f"/media/audio/{final_url}"}
